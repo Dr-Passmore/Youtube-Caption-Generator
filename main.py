@@ -2,21 +2,24 @@ import downloadMP3
 import secret
 import createSRT
 import pvleopard
-
-downloadAudioFile = downloadMP3.download('https://www.youtube.com/watch?v=youJhzSYK04')
-
+import csv
 
 key = secret.access_key
-
-
 leopard = pvleopard.create(access_key=key)
 
-transcript, words = leopard.process_file(f"audio/{downloadAudioFile.output}")
+with open("./videolist.csv", 'r') as file:
+    csvreader = csv.reader(file)
+    for row in csvreader:
+        print(row[1])
+        downloadAudioFile = downloadMP3.download(row[0])
+        transcript, words = leopard.process_file(f"audio/{downloadAudioFile.output}")
+        print(downloadAudioFile.output)
+        print("--------------------------------")
+        print(transcript)
+        print("--------------------------------")
+        generator = createSRT.SubtitleGenerator()
 
-print(transcript)
-generator = createSRT.SubtitleGenerator()
-
-with open(f"srt files/{downloadAudioFile.output}.srt", 'w') as f:
-    f.write(generator.to_srt(words))
+        with open(f"srt files/{downloadAudioFile.output}.srt", 'w') as f:
+            f.write(generator.to_srt(words))
 
 
