@@ -3,6 +3,7 @@ import secret
 import createSRT
 import pvleopard
 import csv
+import time
 
 key = secret.access_key
 leopard = pvleopard.create(access_key=key)
@@ -21,5 +22,7 @@ with open("./videolist.csv", 'r') as file:
 
         with open(f"srt files/{downloadAudioFile.output}.srt", 'w') as f:
             f.write(generator.to_srt(words))
+        
+        time.sleep(10)
 
 

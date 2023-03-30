@@ -1,9 +1,14 @@
 from pytube import YouTube
-
+import time
 class download:
     def __init__(self, url):
         youtube = YouTube(url)
+        time.sleep(3)
         name = youtube.title.replace(":", "")
+        name = name.replace("/", "")
+        name = name.replace("?", "")
+        name = name.replace('"', "")
+        time.sleep(3) 
         audio_stream = youtube \
             .streams \
             .filter(only_audio=True, audio_codec='opus') \
