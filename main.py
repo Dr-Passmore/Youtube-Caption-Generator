@@ -5,11 +5,30 @@ import createSRT
 
 #import python libraries
 import pvleopard
-import csv
-import time
 import tkinter
 from tkinter import ttk
 import sv_ttk
+import configparser
+import logging
+import os
+
+class srtGeneration():
+    def __init__(self):
+        config = configparser.ConfigParser()
+        configFile = os.path.exists('config.ini')
+        if configFile == False:
+            print("No file found")
+            srtGeneration.configurationFileCreation(self, config)
+            
+        
+    def configurationFileCreation(self, config):
+        config.add_section('API Key')
+        config.set('API Key', 'Key', '')
+        with open(r"config.ini", 'w') as configuration:
+            config.write(configuration)
+        
+        
+
 
 key = secret.access_key
 leopard = pvleopard.create(access_key=key)
@@ -42,3 +61,10 @@ with open("./videolist.csv", 'r') as file:
         time.sleep(10)
 
 '''
+logging.basicConfig(filename='YouTube Caption Generator.log', 
+                    filemode='a', 
+                    level=logging.INFO,
+                    format='%(asctime)s %(levelname)s %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+
+srtGeneration()
