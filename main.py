@@ -11,6 +11,8 @@ import sv_ttk
 import configparser
 import logging
 import os
+import requests
+
 
 class srtGeneration():
     def __init__(self):
@@ -27,7 +29,6 @@ class srtGeneration():
         #load user interface
         srtGeneration.userInterface(self, config)    
         
-        
     def configurationFileCreation(self, config):
         logging.info("Creating 'config.ini' file")
         try:
@@ -35,18 +36,44 @@ class srtGeneration():
             config.set('API Key', 'Key', '')
             with open(r"config.ini", 'w') as configuration:
                 config.write(configuration)
-        except:
-            logging.error("Failed to create config.ini")
+            logging.info('config.ini created successfully')
+        except Exception as e:
+            logging.error(f"Failed to create config.ini: {e}")
     
     def userInterface(self, config):
+        logging.info("User Interface Loading")
         root = tkinter.Tk()
-
+        root.geometry("800x500")
+        root.title("SRT Generator")
         button = ttk.Button(root, text="Click me!")
         button.pack()
         sv_ttk.set_theme("dark")
 
         root.mainloop()
 
+    def updateConfig(self, config):
+        print("Requires adding")
+        
+    def downloadAudio(self, url):
+        if srtGeneration.checkURL(self, url) == False:
+            logging.info("URL failed validation")
+            
+        else:
+            print("hi")
+            
+    
+    def checkURL(self, url):
+        checkContent = '"playabilityStatus":{"status":"ERROR","reason":"Video unavailable"'
+        try:
+            logging.info("Checking Youtube URL is accessible")
+            request = requests.get(url)
+            return False if checkContent in request.text else True
+        except Exception as e:
+            logging.error(f"Request processing of URL failed: {e}")
+            
+        
+    
+    
 key = secret.access_key
 leopard = pvleopard.create(access_key=key)
 
